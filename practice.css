@@ -202,8 +202,29 @@ nav {
   color: var(--muted); margin-bottom: 1rem;
 }
 
+/* INTRO SECTION */
+.p-intro { padding: 5rem 0 4rem; border-bottom: 1px solid var(--rule); }
+.p-intro-inner { max-width: 820px; }
+.p-intro-eyebrow {
+  font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--terra); display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+.p-intro-eyebrow::before {
+  content: ''; display: block; width: 2rem; height: 1px; background: var(--terra);
+}
+.p-intro-title {
+  font-family: var(--serif); font-size: clamp(1.65rem, 2.5vw, 2.2rem);
+  font-weight: 300; line-height: 1.3; letter-spacing: 0.01em;
+  color: var(--ink); margin-bottom: 1.5rem;
+}
+.p-intro-body {
+  font-size: 0.95rem; line-height: 1.9; color: var(--muted);
+  max-width: 680px; border-left: 2px solid var(--rule); padding-left: 1.75rem;
+}
+
 /* BLOG SECTION */
-#practice-posts { padding: 5rem 0 7rem; }
+#practice-posts { padding: 4rem 0 7rem; }
 .blog-section { width: 100%; }
 .blog-header {
   display: flex; align-items: baseline; justify-content: space-between;
@@ -393,6 +414,8 @@ footer {
   .p-hero { padding: 8rem 2rem 4rem; }
   .container { padding: 0 2rem; }
   .blog-grid { grid-template-columns: 1fr; }
+  .p-intro { padding: 3rem 0 3rem; }
+  .p-intro-body { padding-left: 1.25rem; }
   .blog-section { padding: 3rem 0 5rem; }
   .p-cta-inner { flex-direction: column; align-items: flex-start; }
   footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem; }

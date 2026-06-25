@@ -27,7 +27,7 @@
       var html =
         '<div class="blog-section">' +
           '<div class="blog-header">' +
-            '<span class="blog-label">Makaleler</span>' +
+            '<h2 class="blog-label">Makaleler</h2>' +
             '<span class="blog-count">' + posts.length + ' yazı</span>' +
           '</div>' +
           '<div class="blog-grid">';
