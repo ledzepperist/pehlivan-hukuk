@@ -70,6 +70,9 @@ module.exports = async (req, res) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
+    // Password-only check (login verification from admin)
+    if (body._check) return res.status(200).json({ ok: true });
+
     const post = body.post;
     if (!post || !post.slug || !post.title || !post.practiceArea) {
       return res.status(400).json({ error: 'Missing required fields: slug, title, practiceArea' });
@@ -96,7 +99,8 @@ module.exports = async (req, res) => {
     }, token);
 
     if (commitRes.status !== 200 && commitRes.status !== 201) {
-      return res.status(500).json({ error: 'Failed to commit', detail: commitRes.body });
+      const msg = commitRes.body && commitRes.body.message ? commitRes.body.message : JSON.stringify(commitRes.body);
+      return res.status(500).json({ error: 'GitHub: ' + msg });
     }
 
     res.status(200).json({ ok: true, post });

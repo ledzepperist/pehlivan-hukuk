@@ -396,7 +396,7 @@
         setStatus('Yayımlandı! Site yaklaşık 30 saniye içinde güncellenir.', 'success');
         loadPosts();
       } else {
-        setStatus('Hata: ' + (data.error || 'Bilinmeyen hata'), 'error');
+        setStatus('Hata: ' + (data.error || 'Bilinmeyen hata') + (data.detail ? ' — ' + JSON.stringify(data.detail) : ''), 'error');
       }
     })
     .catch(function() {
