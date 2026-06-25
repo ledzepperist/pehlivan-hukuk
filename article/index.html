@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makale — Pehlivan Hukuk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../practice.css">
+<style>
+  .article-hero {
+    background: var(--ink);
+    padding: 10rem 0 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .article-hero-lines {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .article-hero-lines span {
+    position: absolute; top: 0; bottom: 0; width: 1px;
+    background: rgba(255,255,255,0.03);
+  }
+  .article-hero-lines span:nth-child(1) { left: 25%; }
+  .article-hero-lines span:nth-child(2) { left: 50%; }
+  .article-hero-lines span:nth-child(3) { left: 75%; }
+  .article-back {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: rgba(255,255,255,0.4); font-size: 0.72rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    text-decoration: none; margin-bottom: 2.5rem;
+    transition: color 0.2s;
+  }
+  .article-back:hover { color: rgba(255,255,255,0.8); }
+  .article-meta-row {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .article-date {
+    font-size: 0.72rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.35);
+  }
+  .article-tag-badge {
+    font-size: 0.65rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--terra-light);
+    border: 1px solid rgba(168,95,56,0.4);
+    padding: 0.2rem 0.7rem; border-radius: 2px;
+  }
+  .article-area-badge {
+    font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.3);
+  }
+  .article-title {
+    font-family: var(--serif); font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 400; color: #fff; line-height: 1.15;
+    max-width: 22ch; margin-bottom: 1.5rem;
+  }
+  .article-excerpt {
+    font-family: var(--serif); font-size: 1.15rem;
+    color: rgba(255,255,255,0.5); line-height: 1.7;
+    max-width: 55ch; font-style: italic;
+  }
+  .article-body-wrap {
+    max-width: 72ch; margin: 0 auto; padding: 5rem 2rem 6rem;
+  }
+  .article-body p {
+    color: var(--muted); line-height: 1.9; margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+  .article-body h3 {
+    font-family: var(--serif); font-size: 1.5rem; font-weight: 400;
+    color: var(--ink); margin: 2.5rem 0 1rem; letter-spacing: 0.01em;
+  }
+  .article-body h4 {
+    font-family: var(--serif); font-size: 1.15rem; font-weight: 500;
+    color: var(--ink); margin: 2rem 0 0.75rem;
+  }
+  .article-body ul, .article-body ol {
+    margin: 1rem 0 1.5rem 1.5rem; color: var(--muted);
+    font-size: 0.95rem; line-height: 1.85;
+  }
+  .article-body li { margin-bottom: 0.4rem; }
+  .article-body blockquote {
+    border-left: 2px solid var(--terra); margin: 2rem 0;
+    padding: 0.5rem 0 0.5rem 2rem;
+    font-family: var(--serif); font-size: 1.15rem;
+    color: var(--ink); font-style: italic; line-height: 1.7;
+  }
+  .article-rule {
+    width: 3rem; height: 1px; background: var(--terra);
+    margin: 4rem auto 4rem 0;
+  }
+  .article-cta {
+    background: var(--ink); padding: 5rem 2rem; text-align: center;
+  }
+  .article-cta p {
+    font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 2rem);
+    color: rgba(255,255,255,0.75); margin-bottom: 2rem; font-weight: 300;
+  }
+  .article-cta em { color: var(--terra-light); font-style: italic; }
+  .not-found {
+    text-align: center; padding: 10rem 2rem;
+    font-family: var(--serif); color: var(--muted); font-size: 1.2rem;
+  }
+  @media (max-width: 768px) {
+    .article-hero { padding: 8rem 0 3rem; }
+    .article-body-wrap { padding: 3rem 1.5rem 4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div id="site-header"></div>
+
+<div id="article-root">
+  <div class="not-found">Yükleniyor…</div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="../cursor.js"></script>
+<script src="../nav.js"></script>
+<script>
+(function () {
+  var AREA_NAMES = {
+    'aile-hukuku': 'Aile Hukuku',
+    'miras-hukuku': 'Miras Hukuku',
+    'tuketici-hukuku': 'Tüketici Hukuku',
+    'ceza-hukuku': 'Ceza Hukuku',
+    'ticaret-hukuku': 'Ticaret Hukuku',
+    'is-hukuku': 'İş Hukuku',
+    'sozlesmeler-hukuku': 'Sözleşmeler Hukuku',
+    'gayrimenkul-hukuku': 'Gayrimenkul Hukuku',
+    'icra-iflas-hukuku': 'İcra ve İflas Hukuku'
+  };
+
+  var slug = new URLSearchParams(window.location.search).get('slug');
+  var root = document.getElementById('article-root');
+
+  if (!slug) {
+    root.innerHTML = '<div class="not-found">Makale bulunamadı.</div>';
+    return;
+  }
+
+  fetch('../posts.json')
+    .then(function (r) { return r.json(); })
+    .then(function (posts) {
+      var post = posts.find(function (p) { return p.slug === slug; });
+      if (!post) {
+        root.innerHTML = '<div class="not-found">Makale bulunamadı.</div>';
+        return;
+      }
+
+      document.title = post.title + ' — Pehlivan Hukuk';
+      var areaName = AREA_NAMES[post.practiceArea] || post.practiceArea;
+
+      root.innerHTML =
+        '<section class="article-hero">' +
+          '<div class="article-hero-lines" aria-hidden="true"><span></span><span></span><span></span></div>' +
+          '<div class="container">' +
+            '<a href="../' + post.practiceArea + '/" class="article-back">← ' + areaName + '</a>' +
+            '<div class="article-meta-row">' +
+              '<span class="article-date">' + post.date + '</span>' +
+              (post.tag ? '<span class="article-tag-badge">' + post.tag + '</span>' : '') +
+              '<span class="article-area-badge">' + areaName + '</span>' +
+            '</div>' +
+            '<h1 class="article-title">' + post.title + '</h1>' +
+            (post.excerpt ? '<p class="article-excerpt">' + post.excerpt + '</p>' : '') +
+          '</div>' +
+        '</section>' +
+        '<div class="article-body-wrap">' +
+          '<div class="article-body">' + (post.content || '') + '</div>' +
+          '<div class="article-rule"></div>' +
+        '</div>' +
+        '<section class="article-cta">' +
+          '<div class="container">' +
+            '<p>Hukuki danışmanlık için <em>bizimle iletişime geçin.</em></p>' +
+            '<a href="mailto:info@hukukpehlivan.com" class="p-cta-btn"><span>Randevu Al</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>' +
+          '</div>' +
+        '</section>';
+    })
+    .catch(function () {
+      root.innerHTML = '<div class="not-found">İçerik yüklenemedi.</div>';
+    });
+})();
+</script>
+</body>
+</html>

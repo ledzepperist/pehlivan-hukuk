@@ -1,0 +1,52 @@
+[
+  {
+    "slug": "bosanma-sureci",
+    "title": "Boşanma Sürecinde Bilinmesi Gereken Her Şey",
+    "excerpt": "Boşanma, yalnızca hukuki değil duygusal açıdan da ağır bir süreçtir. Haklarınızı bilerek bu sürece hazırlıklı girmek, hem sizi hem de çocuklarınızı korur.",
+    "content": "<p>Türk Medeni Kanunu'na göre boşanma, anlaşmalı ya da çekişmeli olmak üzere iki temel şekilde gerçekleşebilir. Anlaşmalı boşanmada taraflar; velayet, nafaka, mal paylaşımı ve diğer tüm konularda uzlaşır ve bunu mahkemeye sunar. Evlilik en az bir yıl sürmüşse anlaşmalı boşanma mümkündür.</p><p>Çekişmeli boşanmada ise taraflardan biri boşanmak istemeyebilir ya da koşullarda anlaşmazlık yaşanabilir. Bu durumda mahkeme, sunulan delilleri değerlendirerek karar verir. Zina, terk, şiddet, onur kırıcı davranış veya evlilik birliğinin temelinden sarsılması gibi sebepler çekişmeli boşanmaya zemin hazırlar.</p><h3>Velayet ve Nafaka</h3><p>Boşanmada çocukların velayeti; çocuğun yaşı, cinsiyeti, ebeveynlerin durumu ve çocuğun üstün yararı gözetilerek belirlenir. Velayet kendisine verilmeyen ebeveyn, çocukla kişisel ilişki kurma hakkını korur. İştirak nafakası, velayeti almayan ebeveynin çocuğun giderlerine katkısını sağlar; yoksulluk nafakası ise ekonomik olarak zayıf düşen eşe ödenir.</p><ul><li>Mal rejimi tasfiyesinde evlilik içinde edinilen mallar kural olarak eşit paylaşılır.</li><li>Anlaşmalı boşanma genellikle tek duruşmada sonuçlanır.</li><li>Boşandıktan sonra soyadı değişikliği için ayrı başvuru gerekmez.</li><li>Yabancı mahkeme kararlarının Türkiye'de geçerli olması için tanıma-tenfiz davası açılmalıdır.</li></ul>",
+    "date": "12 Haziran 2025",
+    "tag": "Rehber",
+    "practiceArea": "aile-hukuku",
+    "featured": true
+  },
+  {
+    "slug": "velayet-davasi-sureci",
+    "title": "Velayet Davası: Çocuğun Üstün Yararı İlkesi",
+    "excerpt": "Velayet kararlarında hâkim, her zaman çocuğun üstün yararını esas alır. Ebeveynlerin hukuki ve psikolojik hazırlığı, sürecin seyrini doğrudan etkiler.",
+    "content": "<p>Velayet davaları, Türk aile hukukunun en hassas alanlarından birini oluşturmaktadır. Mahkeme, velayet kararı verirken çocuğun yaşını, sağlık durumunu, ebeveynlerin ekonomik ve sosyal koşullarını, çocukla kurulan duygusal bağı ve kardeşlerin birlikteliğini göz önünde bulundurur.</p><p>Küçük yaştaki çocuklarda anne lehine karar verme eğilimi bulunmakla birlikte, bu bir kural değildir. Hâkim gerekli gördüğünde sosyal inceleme raporu talep edebilir; uzman pedagog ve psikologlar çocukla görüşerek rapor hazırlar.</p>",
+    "date": "28 Nisan 2025",
+    "tag": "Uygulama",
+    "practiceArea": "aile-hukuku",
+    "featured": false
+  },
+  {
+    "slug": "miras-taksimi",
+    "title": "Miras Taksimi ve Mirasçıların Hakları",
+    "excerpt": "Miras bırakanın ölümüyle birlikte mirasçılar arasında ortak bir mülkiyet ilişkisi doğar. Bu ilişkinin sağlıklı yönetimi, ilerideki uyuşmazlıkları önler.",
+    "content": "<p>Miras hukuku, kişinin ölümünden sonra malvarlığının nasıl dağıtılacağını düzenler. Türk Medeni Kanunu'na göre yasal mirasçılar; alt soy (çocuklar ve torunlar), ana-baba, büyükanne ve büyükbabalar ile eştir. Vasiyetname ile yasal mirasçılık düzeni değiştirilebilir; ancak saklı pay hükümleri her durumda geçerliliğini korur.</p><p>Mirasçılar arasında anlaşmazlık çıkması halinde miras ortaklığının giderilmesi (izale-i şüyu) davası açılabilir. Bu dava sonucunda mallar ya aynen paylaştırılır ya da satışa çıkarılarak bedel paylaşılır.</p>",
+    "date": "15 Mayıs 2025",
+    "tag": "Rehber",
+    "practiceArea": "miras-hukuku",
+    "featured": true
+  },
+  {
+    "slug": "isci-haklari",
+    "title": "İşçinin Kıdem ve İhbar Tazminatı Hakları",
+    "excerpt": "Haksız işten çıkarma durumunda işçinin talep edebileceği haklar nelerdir? Hesaplama yöntemleri ve dava süreçleri hakkında kapsamlı rehber.",
+    "content": "<p>İş hukukunda kıdem tazminatı, işçinin işyerinde geçirdiği süreye ve son brüt ücretine göre hesaplanır. Her tam yıl için 30 günlük brüt ücret esas alınır. İhbar tazminatı ise çalışma süresine göre değişen bildirim sürelerine karşılık gelen ücrettir.</p><p>İşverenin haklı sebep olmaksızın iş akdini feshetmesi durumunda işçi; kıdem tazminatı, ihbar tazminatı ve varsa diğer alacaklarını talep edebilir. İş mahkemelerinde açılacak dava öncesinde arabuluculuk zorunludur.</p>",
+    "date": "20 Mayıs 2025",
+    "tag": "Rehber",
+    "practiceArea": "is-hukuku",
+    "featured": true
+  },
+  {
+    "slug": "icra-takibi-nasil-baslatilir",
+    "title": "İcra Takibi Nasıl Başlatılır? Adım Adım Süreç",
+    "excerpt": "Alacağınızı mahkeme yoluna gitmeden tahsil edebilirsiniz. İcra hukuku, alacaklılara güçlü ve hızlı bir tahsil mekanizması sunmaktadır.",
+    "content": "<p>İcra takibi, İcra ve İflas Kanunu çerçevesinde alacaklının yetkili icra müdürlüğüne başvurmasıyla başlar. Borçlunun ödeme emrine 7 gün içinde itiraz etme hakkı vardır. İtiraz, takibi durdurur.</p><p>Takip kesinleştikten sonra borçlunun taşınır ve taşınmaz mallarına, banka hesaplarına ve maaşına haciz konulabilir. Maaş haczi, net maaşın dörtte birini aşamaz.</p>",
+    "date": "20 Haziran 2025",
+    "tag": "Rehber",
+    "practiceArea": "icra-iflas-hukuku",
+    "featured": true
+  }
+]

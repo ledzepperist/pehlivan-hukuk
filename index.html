@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pehlivan Hukuk ve Arabuluculuk Bürosu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1814;
+    --cream: #f4efe6;
+    --warm-white: #faf8f4;
+    --terra: #a85f38;
+    --terra-light: #c47348;
+    --muted: #7a736a;
+    --rule: #d4cdc4;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--warm-white);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor-dot {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--terra);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(168,95,56,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.35s ease, height 0.35s ease, border-color 0.2s;
+  }
+  body.cursor-hover .cursor-dot { width: 12px; height: 12px; background: var(--terra-light); }
+  body.cursor-hover .cursor-ring { width: 56px; height: 56px; border-color: rgba(168,95,56,0.6); }
+  body.cursor-dark .cursor-dot { background: #fff; }
+  body.cursor-dark .cursor-ring { border-color: rgba(255,255,255,0.3); }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 4rem;
+    transition: background 0.5s, padding 0.4s, backdrop-filter 0.5s;
+  }
+  nav.scrolled {
+    background: rgba(26,24,20,0.75);
+    backdrop-filter: blur(12px);
+    padding: 1rem 4rem;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    cursor: none;
+  }
+  .nav-logo img {
+    height: 54px;
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+    transition: filter 0.3s;
+  }
+  nav.scrolled .nav-logo img {
+    filter: brightness(0) invert(1);
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+  .nav-links a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 400;
+    transition: color 0.2s;
+    position: relative;
+    cursor: none;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0; right: 100%;
+    height: 1px;
+    background: var(--terra-light);
+    transition: right 0.3s ease;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a:hover::after { right: 0; }
+  .nav-cta { color: var(--terra-light) !important; }
+
+  /* DROPDOWN */
+  .nav-dropdown { position: relative; display: flex; align-items: center; }
+  .nav-dropdown > a { display: inline-flex; align-items: center; gap: 0.4rem; line-height: 1; }
+  .nav-dropdown > a .drop-arrow {
+    width: 7px; height: 7px;
+    border-right: 1px solid rgba(255,255,255,0.5);
+    border-bottom: 1px solid rgba(255,255,255,0.5);
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.25s ease, border-color 0.2s;
+    flex-shrink: 0; display: inline-block;
+  }
+  .nav-dropdown:hover > a .drop-arrow,
+  .nav-dropdown:focus-within > a .drop-arrow {
+    transform: rotate(-135deg) translateY(-2px);
+    border-color: rgba(255,255,255,0.9);
+  }
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 1.25rem);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20,18,15,0.97);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-top: 2px solid var(--terra);
+    min-width: 260px;
+    padding: 0.5rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    z-index: 200;
+  }
+  .nav-dropdown:hover .dropdown-menu,
+  .nav-dropdown:focus-within .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  .dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.5rem;
+    color: rgba(255,255,255,0.6);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.2s, padding-left 0.2s;
+    white-space: nowrap;
+    cursor: none;
+  }
+  .dropdown-menu a::after { display: none; }
+  .dropdown-menu a:hover { color: #fff; padding-left: 2rem; }
+  .dropdown-menu a:hover .dm-num { color: var(--terra-light); }
+  .dropdown-menu a .dm-num {
+    font-family: var(--serif);
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.2);
+    transition: color 0.2s;
+    min-width: 1.5rem;
+  }
+  .dropdown-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    margin: 0.4rem 1.5rem;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .stagger-1 { transition-delay: 0.1s; }
+  .stagger-2 { transition-delay: 0.2s; }
+  .stagger-3 { transition-delay: 0.3s; }
+  .stagger-4 { transition-delay: 0.4s; }
+  .stagger-5 { transition-delay: 0.5s; }
+  .stagger-6 { transition-delay: 0.6s; }
+  .stagger-7 { transition-delay: 0.7s; }
+  .stagger-8 { transition-delay: 0.8s; }
+  .stagger-9 { transition-delay: 0.9s; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 8rem 4rem 5rem;
+    overflow: hidden;
+  }
+
+  /* Animated background lines */
+  .hero-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-lines span {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: rgba(255,255,255,0.03);
+    animation: linePulse 6s ease-in-out infinite;
+  }
+  .hero-lines span:nth-child(1) { left: 20%; animation-delay: 0s; }
+  .hero-lines span:nth-child(2) { left: 40%; animation-delay: 1s; }
+  .hero-lines span:nth-child(3) { left: 60%; animation-delay: 2s; }
+  .hero-lines span:nth-child(4) { left: 80%; animation-delay: 3s; }
+  @keyframes linePulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1.5; }
+  }
+
+  /* Scales of justice SVG decoration */
+  .hero-scales {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.035;
+    width: 420px;
+    height: 420px;
+    animation: scalesFloat 8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes scalesFloat {
+    0%, 100% { transform: translate(-50%, -50%) rotate(-1deg); }
+    50% { transform: translate(-50%, -52%) rotate(1deg); }
+  }
+
+  .hero-year {
+    position: absolute;
+    top: 50%;
+    right: -2rem;
+    transform: translateY(-50%);
+    font-family: var(--serif);
+    font-size: clamp(14rem, 22vw, 22rem);
+    font-weight: 300;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+    letter-spacing: -0.04em;
+    will-change: transform;
+  }
+
+  .hero-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terra-light);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 1px;
+    background: var(--terra-light);
+    animation: lineGrow 0.6s ease 0.8s forwards;
+  }
+  @keyframes lineGrow { to { width: 2rem; } }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: #fff;
+    max-width: 14ch;
+    margin-bottom: 3rem;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.5s forwards;
+  }
+  .hero h1 em { font-style: italic; color: rgba(255,255,255,0.5); }
+
+  /* Animated text reveal underline on headline */
+  .hero h1 .underline-anim {
+    position: relative;
+    display: inline-block;
+  }
+  .hero h1 .underline-anim::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 4px;
+    height: 1px;
+    width: 0;
+    background: var(--terra);
+    animation: lineGrow2 0.8s ease 1.4s forwards;
+  }
+  @keyframes lineGrow2 { to { width: 100%; } }
+
+  .hero-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.9s forwards;
+  }
+  .hero-desc {
+    max-width: 38ch;
+    color: rgba(255,255,255,0.45);
+    font-size: 0.88rem;
+    line-height: 1.75;
+    font-weight: 300;
+  }
+  .hero-stats { display: flex; gap: 3rem; align-items: flex-end; }
+  .hero-stat-num {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: #fff;
+    line-height: 1;
+    display: block;
+  }
+  .hero-stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    display: block;
+    margin-top: 0.25rem;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.25);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.5s forwards;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 3rem;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    animation: scrollDrop 2.2s ease-in-out infinite;
+  }
+  @keyframes scrollDrop {
+    0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+    45% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+    46% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+  }
+
+  /* ORNAMENTAL DIVIDER */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem 0;
+  }
+  .ornament-line { flex: 1; height: 1px; background: var(--rule); }
+  .ornament-svg { color: var(--terra); flex-shrink: 0; }
+
+  /* SECTION BASE */
+  section { position: relative; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 4rem; }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  /* TICKER STRIP */
+  .strip {
+    background: var(--terra);
+    padding: 1rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+  .strip::before, .strip::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 4rem;
+    z-index: 1;
+  }
+  .strip::before { left: 0; background: linear-gradient(to right, var(--terra), transparent); }
+  .strip::after { right: 0; background: linear-gradient(to left, var(--terra), transparent); }
+  .strip-inner {
+    display: inline-flex;
+    animation: ticker 35s linear infinite;
+    gap: 0;
+  }
+  .strip-inner span {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.88);
+    letter-spacing: 0.06em;
+    padding: 0 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+  .strip-inner span::after {
+    content: '';
+    display: block;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+  }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ABOUT */
+  .about { padding: 9rem 0; background: var(--warm-white); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .about-left { position: sticky; top: 8rem; }
+  .about-headline {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 4.5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 2rem;
+  }
+  .about-headline em { font-style: italic; color: var(--terra); }
+  .about-body {
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.9;
+    max-width: 42ch;
+  }
+  .about-body p + p { margin-top: 1.25rem; }
+  .about-rule {
+    width: 0; height: 1px;
+    background: var(--terra);
+    margin: 2rem 0;
+    transition: width 1s ease;
+  }
+  .about-rule.visible { width: 3rem; }
+  .about-right { padding-top: 1rem; }
+  .about-values { list-style: none; border-top: 1px solid var(--rule); }
+  .about-values li {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .about-values .v-num {
+    font-family: var(--serif);
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: var(--terra);
+    padding-top: 0.1rem;
+    letter-spacing: 0.04em;
+  }
+  .about-values .v-title {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.01em;
+  }
+  .about-values .v-text { font-size: 0.83rem; color: var(--muted); line-height: 1.75; }
+
+  /* Decorative quote in about */
+  .legal-quote {
+    position: relative;
+    margin: 3rem 0 2rem;
+    padding: 2rem 2rem 2rem 3rem;
+    border-left: 2px solid var(--terra);
+  }
+  .legal-quote::before {
+    content: '"';
+    font-family: var(--serif);
+    font-size: 5rem;
+    color: var(--terra);
+    opacity: 0.2;
+    position: absolute;
+    top: -1rem; left: 1rem;
+    line-height: 1;
+  }
+  .legal-quote p {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .legal-quote cite {
+    display: block;
+    margin-top: 0.75rem;
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-style: normal;
+  }
+
+  /* PRACTICE AREAS */
+  .practice { background: var(--ink); padding: 9rem 0; color: #fff; }
+  .practice-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 5rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .practice-title {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .practice-count {
+    font-family: var(--serif);
+    font-size: 5rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.07);
+    line-height: 1;
+  }
+  .practice-list { list-style: none; }
+  .practice-item {
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    overflow: hidden;
+    position: relative;
+  }
+  .practice-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: rgba(168,95,56,0.08);
+    transition: width 0.4s ease;
+    z-index: 0;
+  }
+  .practice-item:hover::before { width: 100%; }
+  .practice-item a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.8rem 0;
+    text-decoration: none;
+    color: inherit;
+    transition: padding-left 0.35s ease;
+    position: relative; z-index: 1;
+  }
+  .practice-item:hover a { padding-left: 1.5rem; }
+  .practice-item:hover .p-name { color: var(--terra-light); }
+  .practice-item:hover .p-arrow { opacity: 1; transform: translateX(0); }
+  .p-left { display: flex; align-items: baseline; gap: 2rem; }
+  .p-num {
+    font-family: var(--serif);
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.2);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    min-width: 2rem;
+    transition: color 0.3s;
+  }
+  .practice-item:hover .p-num { color: var(--terra-light); }
+  .p-name {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    transition: color 0.3s;
+  }
+  .p-arrow {
+    color: var(--terra-light);
+    font-size: 1.1rem;
+    opacity: 0;
+    transform: translateX(-0.75rem);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
+  /* TEAM */
+  .team { background: var(--cream); padding: 9rem 0; }
+  .team-header { margin-bottom: 5rem; }
+  .team-title {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+  .team-subtitle { color: var(--muted); font-size: 0.85rem; max-width: 44ch; line-height: 1.75; }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .team-card {
+    background: var(--warm-white);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: background 0.35s, transform 0.35s;
+    overflow: hidden;
+  }
+  .team-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 0;
+    background: var(--terra);
+    transition: height 0.35s ease;
+  }
+  .team-card:hover { background: #fff; transform: translateY(-4px); }
+  .team-card:hover::after { height: 2px; }
+  .team-card-accent {
+    width: 2rem; height: 2px;
+    background: var(--terra);
+    margin-bottom: 2rem;
+    transition: width 0.35s ease;
+  }
+  .team-card:hover .team-card-accent { width: 4rem; }
+  .team-initials {
+    width: 3.5rem; height: 3.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--terra);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .team-card:hover .team-initials {
+    background: var(--terra);
+    border-color: var(--terra);
+    color: #fff;
+  }
+  .team-name {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.01em;
+  }
+  .team-role {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 1.5rem;
+  }
+  .team-bio { font-size: 0.83rem; color: var(--muted); line-height: 1.8; }
+
+  /* APPROACH */
+  .approach { background: var(--warm-white); padding: 9rem 0; }
+  .approach-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .approach-left { position: sticky; top: 8rem; }
+  .approach-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .approach-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 2rem;
+  }
+  .approach-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.85; }
+  .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .pillar {
+    background: var(--cream);
+    padding: 2.5rem;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; right: 0; bottom: 0;
+    background: rgba(168,95,56,0.05);
+    transition: left 0.4s ease;
+  }
+  .pillar:hover::before { left: 0; }
+  .pillar:hover { background: #ece8e0; }
+  .pillar-icon {
+    font-size: 1.3rem;
+    color: var(--terra);
+    margin-bottom: 1.5rem;
+    display: block;
+    font-family: var(--serif);
+    font-weight: 300;
+  }
+  .pillar-title {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.01em;
+  }
+  .pillar-text { font-size: 0.82rem; color: var(--muted); line-height: 1.8; }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--terra);
+    padding: 5rem 0;
+    overflow: hidden;
+  }
+  .stats-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .stat-block {
+    padding: 0 3rem;
+    border-right: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+  }
+  .stat-block:last-child { border-right: none; }
+  .stat-n {
+    font-family: var(--serif);
+    font-size: 4rem;
+    font-weight: 300;
+    color: #fff;
+    line-height: 1;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .stat-l {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* CONTACT */
+  .contact { background: var(--ink); padding: 9rem 0 6rem; color: #fff; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: start;
+  }
+  .contact-title {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 4vw, 3.8rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 2rem;
+  }
+  .contact-title em { font-style: italic; color: rgba(255,255,255,0.35); }
+  .contact-intro {
+    color: rgba(255,255,255,0.45);
+    font-size: 0.88rem;
+    line-height: 1.85;
+    max-width: 40ch;
+    margin-bottom: 3rem;
+  }
+  .contact-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--terra);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    transition: background 0.25s, gap 0.25s;
+    cursor: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--terra-light);
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+  }
+  .contact-cta:hover::before { transform: translateX(0); }
+  .contact-cta:hover { gap: 1.25rem; }
+  .contact-cta span, .contact-cta svg { position: relative; z-index: 1; }
+  .contact-cta svg { width: 14px; height: 14px; }
+  .contact-details { padding-top: 2rem; }
+  .contact-detail {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+  }
+  .contact-detail:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+  .c-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+  }
+  .c-value {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.8);
+  }
+  .c-value a {
+    color: inherit; text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    padding-bottom: 1px;
+    transition: color 0.2s, border-color 0.2s;
+    cursor: none;
+  }
+  .c-value a:hover { color: var(--terra-light); border-color: var(--terra-light); }
+
+  /* FOOTER */
+  footer {
+    background: #0c0b09;
+    padding: 2.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+  .footer-copy { font-size: 0.68rem; color: rgba(255,255,255,0.18); letter-spacing: 0.08em; }
+
+  /* Decorative legal element - corner ornament */
+  .corner-ornament {
+    position: absolute;
+    width: 80px; height: 80px;
+    pointer-events: none;
+    opacity: 0.25;
+  }
+  .corner-ornament.top-right { top: 2rem; right: 2rem; }
+  .corner-ornament.bottom-left { bottom: 2rem; left: 2rem; transform: rotate(180deg); }
+
+  /* HAMBURGER */
+  .nav-burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 101;
+  }
+  .nav-burger span {
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: #fff;
+    transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+    transform-origin: center;
+  }
+  .nav-burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .nav-burger.open span:nth-child(2) { opacity: 0; width: 0; }
+  .nav-burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* MOBILE MENU */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,18,15,0.98);
+    backdrop-filter: blur(16px);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 2.5rem 3rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+  }
+  .mobile-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .mobile-menu-links {
+    list-style: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .mobile-menu-links li {
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .mobile-menu-links > li > a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 0;
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+  }
+  .mobile-menu-links > li > a:hover { color: #fff; }
+  .mobile-menu-links .m-cta { color: var(--terra-light) !important; }
+  .mobile-sub {
+    list-style: none;
+    padding: 0 0 1rem 1rem;
+    display: none;
+  }
+  .mobile-sub.open { display: block; }
+  .mobile-sub li { border: none; }
+  .mobile-sub a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mobile-sub a:hover { color: var(--terra-light); }
+  .mobile-sub .dm-num { font-family: var(--serif); font-size: 0.65rem; color: rgba(255,255,255,0.2); min-width: 1.5rem; }
+  .mobile-toggle-arrow {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.3);
+    transition: transform 0.25s ease;
+  }
+  .mobile-toggle-arrow.open { transform: rotate(180deg); }
+  .mobile-footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    body { cursor: auto; }
+    .cursor-dot, .cursor-ring { display: none; }
+    nav { padding: 1.25rem 2rem; }
+    nav.scrolled { padding: 0.85rem 2rem; }
+    .nav-links { display: none; }
+    .nav-burger { display: flex; }
+    .hero { padding: 22vh 2rem 4rem; min-height: auto; justify-content: flex-start; }
+    .hero-scroll { display: none; }
+    .hero-stats { display: none; }
+    .hero-scales { width: 240px; height: 240px; }
+    .container { padding: 0 2rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .about-left { position: static; }
+    .team-grid { grid-template-columns: 1fr; }
+    .approach-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .approach-left { position: static; }
+    .pillars { grid-template-columns: 1fr; }
+    .pillar.reveal { transform: translateY(12px); }
+    .pillar.stagger-1 { transition-delay: 0s; }
+    .pillar.stagger-2 { transition-delay: 0.08s; }
+    .pillar.stagger-3 { transition-delay: 0.16s; }
+    .pillar.stagger-4 { transition-delay: 0.24s; }
+    .stats-inner { grid-template-columns: 1fr 1fr; }
+    .stat-block { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding: 2rem; }
+    .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div id="site-header"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-lines" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- Scales of Justice SVG -->
+  <svg class="hero-scales" aria-hidden="true" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Base -->
+    <rect x="185" y="340" width="30" height="12" rx="2" fill="white"/>
+    <rect x="160" y="352" width="80" height="8" rx="2" fill="white"/>
+    <!-- Pole -->
+    <rect x="198" y="100" width="4" height="245" fill="white"/>
+    <!-- Crossbar -->
+    <rect x="100" y="115" width="200" height="4" rx="2" fill="white"/>
+    <!-- Crown / top ornament -->
+    <circle cx="200" cy="100" r="8" fill="white"/>
+    <circle cx="200" cy="100" r="4" fill="white" opacity="0.5"/>
+    <!-- Left chain -->
+    <line x1="120" y1="119" x2="100" y2="200" stroke="white" stroke-width="2"/>
+    <!-- Right chain -->
+    <line x1="280" y1="119" x2="300" y2="200" stroke="white" stroke-width="2"/>
+    <!-- Left pan -->
+    <path d="M70 200 Q100 195 130 200 Q100 220 70 200Z" fill="white"/>
+    <line x1="70" y1="200" x2="130" y2="200" stroke="white" stroke-width="1.5"/>
+    <!-- Right pan -->
+    <path d="M270 200 Q300 195 330 200 Q300 220 270 200Z" fill="white"/>
+    <line x1="270" y1="200" x2="330" y2="200" stroke="white" stroke-width="1.5"/>
+    <!-- Decorative circles on pans -->
+    <circle cx="100" cy="207" r="3" fill="white" opacity="0.6"/>
+    <circle cx="300" cy="207" r="3" fill="white" opacity="0.6"/>
+    <!-- Small decorative elements -->
+    <circle cx="120" cy="119" r="4" fill="white"/>
+    <circle cx="280" cy="119" r="4" fill="white"/>
+  </svg>
+
+  <div class="hero-year" id="heroYear" aria-hidden="true">1987</div>
+  <div class="hero-tag">Pendik, İstanbul · Est. 1987</div>
+  <h1>Hukuki güvenlik,<br><em><span class="underline-anim">40 yılı aşkın</span></em><br>deneyimle.</h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      Pehlivan Hukuk ve Arabuluculuk Bürosu, 1987'den bu yana ulusal ve uluslararası alanda bireyler ve kurumlar için kapsamlı hukuki danışmanlık sunmaktadır.
+    </p>
+    <div class="hero-stats">
+      <div>
+        <span class="hero-stat-num" data-count="40" data-suffix="+">40+</span>
+        <span class="hero-stat-label">Yıl Deneyim</span>
+      </div>
+      <div>
+        <span class="hero-stat-num" data-count="9">9</span>
+        <span class="hero-stat-label">Hukuk Alanı</span>
+      </div>
+      <div>
+        <span class="hero-stat-num" data-count="3">3</span>
+        <span class="hero-stat-label">Uzman Avukat</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="hero-scroll-line"></div>
+    <span>Keşfet</span>
+  </div>
+</section>
+
+<!-- TICKER STRIP -->
+<div class="strip" aria-hidden="true">
+  <div class="strip-inner">
+    <span>Aile Hukuku</span><span>Miras Hukuku</span><span>Tüketici Hukuku</span>
+    <span>Ceza Hukuku</span><span>Ticaret Hukuku</span><span>İş Hukuku</span>
+    <span>Sözleşmeler Hukuku</span><span>Gayrimenkul Hukuku</span><span>İcra ve İflas Hukuku</span>
+    <span>Aile Hukuku</span><span>Miras Hukuku</span><span>Tüketici Hukuku</span>
+    <span>Ceza Hukuku</span><span>Ticaret Hukuku</span><span>İş Hukuku</span>
+    <span>Sözleşmeler Hukuku</span><span>Gayrimenkul Hukuku</span><span>İcra ve İflas Hukuku</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="hakkimizda">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-left">
+        <p class="section-label reveal">Hakkımızda</p>
+        <h2 class="about-headline reveal stagger-1">Güvenilir bir hukuk<br>ortağı, <em>her koşulda.</em></h2>
+        <div class="about-rule reveal stagger-2"></div>
+        <div class="about-body reveal stagger-2">
+          <p>Pehlivan Hukuk ve Arabuluculuk Bürosu, 1987 yılından bu yana edinilen derin deneyimi, yenilikçi ve dinamik bir yaklaşımla harmanlamaktadır.</p>
+          <p>Ulusal ve uluslararası alanda birçok kişi ve kuruma avukatlık, hukuki danışmanlık ve arabuluculuk hizmeti sunan büromuz; müvekkillerinin haklarını en etkin biçimde korumayı ilke edinmiştir.</p>
+        </div>
+        <blockquote class="legal-quote reveal stagger-3">
+          <p>Adalet, yalnızca gerçekleşmekle kalmaz — gerçekleştiği görülmelidir.</p>
+          <cite>Lord Hewart, 1924</cite>
+        </blockquote>
+      </div>
+      <div class="about-right">
+        <ul class="about-values">
+          <li class="reveal stagger-1">
+            <span class="v-num">01</span>
+            <div>
+              <div class="v-title">Güvenilirlik</div>
+              <p class="v-text">Müvekkillerimizle kurduğumuz ilişki, şeffaflık ve dürüstlük temelinde yükselir. Her adımda bilgilendirilmenizi sağlarız.</p>
+            </div>
+          </li>
+          <li class="reveal stagger-2">
+            <span class="v-num">02</span>
+            <div>
+              <div class="v-title">Uzmanlık</div>
+              <p class="v-text">Geniş hukuk alanlarındaki derin bilgimiz ve onlarca yıllık mahkeme deneyimimiz, her davada en iyi sonucu hedeflememizi sağlar.</p>
+            </div>
+          </li>
+          <li class="reveal stagger-3">
+            <span class="v-num">03</span>
+            <div>
+              <div class="v-title">Kişiselleştirilmiş Yaklaşım</div>
+              <p class="v-text">Her müvekkilin ihtiyacı, beklentisi ve koşulu birbirinden farklıdır. Hizmetlerimizi bu farklılığa göre şekillendiririz.</p>
+            </div>
+          </li>
+          <li class="reveal stagger-4">
+            <span class="v-num">04</span>
+            <div>
+              <div class="v-title">Erişilebilirlik</div>
+              <p class="v-text">Online randevu, müvekkil portalı ve elektronik ödeme seçenekleriyle hukuki desteğe her yerden ulaşmanızı sağlarız.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE AREAS -->
+<section class="practice" id="hizmetler">
+  <!-- Corner ornaments -->
+  <svg class="corner-ornament top-right" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+    <path d="M80 0 L80 80 L0 80" stroke="white" stroke-width="1"/>
+    <path d="M80 20 L80 80 L20 80" stroke="white" stroke-width="0.5" opacity="0.5"/>
+    <circle cx="80" cy="0" r="3" fill="white"/>
+  </svg>
+  <svg class="corner-ornament bottom-left" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+    <path d="M80 0 L80 80 L0 80" stroke="white" stroke-width="1"/>
+    <path d="M80 20 L80 80 L20 80" stroke="white" stroke-width="0.5" opacity="0.5"/>
+    <circle cx="80" cy="0" r="3" fill="white"/>
+  </svg>
+  <div class="container">
+    <div class="practice-header">
+      <div>
+        <p class="section-label reveal" style="color:rgba(255,255,255,0.3);">Hizmet Alanlarımız</p>
+        <h2 class="practice-title reveal stagger-1">Kapsamlı hukuki<br>çözümler</h2>
+      </div>
+      <div class="practice-count reveal" aria-hidden="true">09</div>
+    </div>
+    <ul class="practice-list">
+      <li class="practice-item reveal stagger-1"><a href="aile-hukuku/"><div class="p-left"><span class="p-num">01</span><span class="p-name">Aile Hukuku</span></div><span class="p-arrow">→</span></a></li>
+      <li class="practice-item reveal stagger-2"><a href="miras-hukuku/"><div class="p-left"><span class="p-num">02</span><span class="p-name">Miras Hukuku</span></div><span class="p-arrow">→</span></a></li>
+      <li class="practice-item reveal stagger-3"><a href="tuketici-hukuku/"><div class="p-left"><span class="p-num">03</span><span class="p-name">Tüketici Hukuku</span></div><span class="p-arrow">→</span></a></li>
+      <li class="practice-item reveal stagger-4"><a href="ceza-hukuku/"><div class="p-left"><span class="p-num">04</span><span class="p-name">Ceza Hukuku</span></div><span class="p-arrow">→</span></a></li>
+      <li class="practice-item reveal stagger-5"><a href="ticaret-hukuku/"><div class="p-left"><span class="p-num">05</span><span class="p-name">Ticaret Hukuku</span></div><span class="p-arrow">→</span></a></li>
+      <li class="practice-item reveal stagger-6"><a href="is-hukuku/"><div class="p-left"><span class="p-num">06</span><span class="p-name">İş ve Sosyal Güvenlik Hukuku</span></div><span class="p-arrow">→</span></a></li>
+      <li class="practice-item reveal stagger-7"><a href="sozlesmeler-hukuku/"><div class="p-left"><span class="p-num">07</span><span class="p-name">Sözleşmeler Hukuku</span></div><span class="p-arrow">→</span></a></li>
+      <li class="practice-item reveal stagger-8"><a href="gayrimenkul-hukuku/"><div class="p-left"><span class="p-num">08</span><span class="p-name">Gayrimenkul ve Kira Hukuku</span></div><span class="p-arrow">→</span></a></li>
+      <li class="practice-item reveal stagger-9"><a href="icra-iflas-hukuku/"><div class="p-left"><span class="p-num">09</span><span class="p-name">İcra ve İflas Hukuku</span></div><span class="p-arrow">→</span></a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-inner">
+      <div class="stat-block reveal">
+        <span class="stat-n" data-count="40" data-suffix="+">0+</span>
+        <span class="stat-l">Yıl Deneyim</span>
+      </div>
+      <div class="stat-block reveal stagger-1">
+        <span class="stat-n" data-count="9">0</span>
+        <span class="stat-l">Hukuk Alanı</span>
+      </div>
+      <div class="stat-block reveal stagger-2">
+        <span class="stat-n" data-count="1987" data-nosuffix>1987</span>
+        <span class="stat-l">Kuruluş Yılı</span>
+      </div>
+      <div class="stat-block reveal stagger-3">
+        <span class="stat-n" data-count="3">0</span>
+        <span class="stat-l">Uzman Avukat</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<section class="team" id="ekip">
+  <div class="container">
+    <div class="team-header">
+      <p class="section-label reveal">Ekibimiz</p>
+      <h2 class="team-title reveal stagger-1">Deneyimli hukukçular,<br>güçlü bir ekip.</h2>
+      <p class="team-subtitle reveal stagger-2">Her biri kendi alanında uzmanlaşmış avukatlarımız, müvekkillerimizin haklarını kararlılık ve özenle savunur.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal stagger-1">
+        <div class="team-card-accent"></div>
+        <div class="team-initials">SP</div>
+        <h3 class="team-name">Serdar Pehlivan</h3>
+        <p class="team-role">Kurucu Avukat · Arabulucu</p>
+        <p class="team-bio">1987 yılında kurduğu büroyu bugün de aynı tutku ve kararlılıkla yönetmektedir. Ulusal ve uluslararası davalarda 40 yılı aşkın deneyimiyle müvekkillerine kapsamlı hukuki destek sunar.</p>
+      </div>
+      <div class="team-card reveal stagger-2">
+        <div class="team-card-accent"></div>
+        <div class="team-initials">EPC</div>
+        <h3 class="team-name">Elif Pehlivan Çelik</h3>
+        <p class="team-role">Avukat</p>
+        <p class="team-bio">Aile hukuku ve miras davalarında derinlemesine uzmanlaşmıştır. Müvekkillerine yalnızca hukuki çözümler değil, süreç boyunca gerçek bir rehberlik sunar.</p>
+      </div>
+      <div class="team-card reveal stagger-3">
+        <div class="team-card-accent"></div>
+        <div class="team-initials">APY</div>
+        <h3 class="team-name">Ayşe Pehlivan Yokuş</h3>
+        <p class="team-role">Avukat</p>
+        <p class="team-bio">Ticaret hukuku ve iş hukukundaki birikimi ile kurumsal müvekkillerin karmaşık hukuki süreçlerini etkin biçimde yönetir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section class="approach">
+  <div class="container">
+    <div class="approach-grid">
+      <div class="approach-left">
+        <p class="approach-label reveal">Çalışma Yöntemimiz</p>
+        <h2 class="approach-title reveal stagger-1">Stratejik düşünce,<br>titiz hazırlık.</h2>
+        <p class="approach-desc reveal stagger-2">Her davaya önce dinleyerek başlarız. Müvekkilimizin gerçek ihtiyacını anlamadan strateji kurmayız. Hız değil, doğruluk önceliğimizdir.</p>
+
+        <!-- Decorative legal seal SVG -->
+        <svg style="margin-top:3rem; opacity:0.12; width:120px; height:120px;" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+          <circle cx="60" cy="60" r="55" stroke="#a85f38" stroke-width="1"/>
+          <circle cx="60" cy="60" r="48" stroke="#a85f38" stroke-width="0.5"/>
+          <circle cx="60" cy="60" r="40" stroke="#a85f38" stroke-width="1"/>
+          <!-- Star pattern -->
+          <polygon points="60,20 64,52 96,60 64,68 60,100 56,68 24,60 56,52" fill="#a85f38" opacity="0.4"/>
+          <circle cx="60" cy="60" r="8" fill="#a85f38"/>
+          <!-- Text arc (simulated with lines) -->
+          <path d="M20 60 A40 40 0 0 1 100 60" stroke="#a85f38" stroke-width="0.5" fill="none"/>
+        </svg>
+      </div>
+      <div class="pillars">
+        <div class="pillar reveal stagger-1">
+          <span class="pillar-icon">◎</span>
+          <h3 class="pillar-title">Dinliyoruz</h3>
+          <p class="pillar-text">İlk görüşmede, davayı değil müvekkili tanırız. Geçmiş, beklenti ve kaygıları anlamadan hiçbir adım atmayız.</p>
+        </div>
+        <div class="pillar reveal stagger-2">
+          <span class="pillar-icon">◈</span>
+          <h3 class="pillar-title">Analiz Ediyoruz</h3>
+          <p class="pillar-text">Her davanın kendine özgü dinamikleri vardır. Hukuki literatür ve emsal kararları derinlemesine inceleyerek güçlü bir zemin oluştururuz.</p>
+        </div>
+        <div class="pillar reveal stagger-3">
+          <span class="pillar-icon">◇</span>
+          <h3 class="pillar-title">Strateji Kuruyoruz</h3>
+          <p class="pillar-text">Olası senaryoları öngörür, her adımı önceden planlarız. Sürprizlere değil, hazırlığa inanırız.</p>
+        </div>
+        <div class="pillar reveal stagger-4">
+          <span class="pillar-icon">◉</span>
+          <h3 class="pillar-title">Savunuyoruz</h3>
+          <p class="pillar-text">Mahkemede, müzakere masasında ya da arabuluculukta — müvekkilimizin çıkarlarını en güçlü biçimde temsil ederiz.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="iletisim">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <p class="section-label reveal" style="color:rgba(255,255,255,0.25);">İletişim</p>
+        <h2 class="contact-title reveal stagger-1">Hukuki desteğe<br><em>mi ihtiyacınız var?</em></h2>
+        <p class="contact-intro reveal stagger-2">İlk görüşme ücretsizdir. Durumunuzu anlatalım, size en doğru yolu birlikte bulalım. Randevunuzu online alabilirsiniz.</p>
+        <a href="mailto:info@hukukpehlivan.com" class="contact-cta reveal stagger-3">
+          <span>Randevu Al</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="contact-details">
+        <div class="contact-detail reveal stagger-1">
+          <span class="c-label">Adres</span>
+          <span class="c-value">Bahçelievler Mah., Adnan Menderes Blv. No:3 D:20, 34893 Pendik / İstanbul</span>
+        </div>
+        <div class="contact-detail reveal stagger-2">
+          <span class="c-label">Telefon</span>
+          <span class="c-value"><a href="tel:+905071217650">0507 121 7650</a></span>
+        </div>
+        <div class="contact-detail reveal stagger-3">
+          <span class="c-label">E-posta</span>
+          <span class="c-value"><a href="mailto:info@hukukpehlivan.com">info@hukukpehlivan.com</a></span>
+        </div>
+        <div class="contact-detail reveal stagger-4">
+          <span class="c-label">Saatler</span>
+          <span class="c-value">Pazartesi – Cuma&thinsp;·&thinsp;09:00 – 18:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div id="site-footer"></div>
+
+<script>
+(function() {
+  /* ---- CUSTOM CURSOR ---- */
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top = my + 'px';
+  });
+
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  document.querySelectorAll('a, button, .practice-item, .team-card, .pillar').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+
+  /* dark cursor on dark sections */
+  const darkSections = document.querySelectorAll('.practice, .contact, nav');
+  const obs0 = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) document.body.classList.add('cursor-dark');
+      else document.body.classList.remove('cursor-dark');
+    });
+  }, { threshold: 0.5 });
+  darkSections.forEach(s => obs0.observe(s));
+
+  /* ---- HERO PARALLAX ---- */
+  const heroYear = document.getElementById('heroYear');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y < window.innerHeight) {
+      heroYear.style.transform = `translateY(calc(-50% + ${y * 0.25}px))`;
+    }
+  }, { passive: true });
+
+  /* ---- SCROLL REVEAL ---- */
+  const revealEls = document.querySelectorAll('.reveal, .reveal-left');
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        /* animate the rule bar separately */
+        if (e.target.classList.contains('about-rule')) {
+          e.target.classList.add('visible');
+        }
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => revealObs.observe(el));
+
+  /* ---- ANIMATED COUNTERS ---- */
+  function animateCount(el) {
+    const target = parseInt(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const nosuffix = el.dataset.nosuffix !== undefined;
+    const duration = nosuffix ? 0 : 1200;
+    if (nosuffix) { el.textContent = target + suffix; return; }
+    const start = Date.now();
+    function tick() {
+      const progress = Math.min((Date.now() - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const val = Math.round(ease * target);
+      el.textContent = val + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    tick();
+  }
+
+  const countEls = document.querySelectorAll('[data-count]');
+  const countObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCount(e.target);
+        countObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  countEls.forEach(el => countObs.observe(el));
+
+  /* ---- PRACTICE ITEM stagger on scroll ---- */
+  /* already handled by reveal classes */
+
+})();
+</script>
+<script src="./nav.js"></script>
+</body>
+</html>

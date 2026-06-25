@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Pehlivan Hukuk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1a1814; --cream: #f4efe6; --warm-white: #faf8f4;
+    --terra: #a85f38; --terra-light: #c47348; --muted: #7a736a;
+    --rule: #d4cdc4; --serif: 'Cormorant Garamond', serif;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+  body { font-family: var(--sans); background: var(--warm-white); color: var(--ink); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: var(--ink);
+  }
+  .login-box {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    padding: 3rem; width: 100%; max-width: 360px; border-radius: 2px;
+  }
+  .login-logo { font-family: var(--serif); font-size: 1.4rem; color: #fff; margin-bottom: 0.25rem; }
+  .login-sub { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 2.5rem; }
+  .login-box input {
+    width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    color: #fff; padding: 0.85rem 1rem; font-family: var(--sans); font-size: 0.9rem;
+    border-radius: 2px; outline: none; transition: border-color 0.2s; margin-bottom: 1rem;
+  }
+  .login-box input:focus { border-color: var(--terra); }
+  .login-box input::placeholder { color: rgba(255,255,255,0.25); }
+  .btn-primary {
+    width: 100%; background: var(--terra); color: #fff; border: none;
+    padding: 0.85rem; font-family: var(--sans); font-size: 0.78rem;
+    letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+    border-radius: 2px; transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--terra-light); }
+  .login-error { color: #e87070; font-size: 0.78rem; margin-top: 0.75rem; display: none; }
+
+  /* ── ADMIN SHELL ── */
+  #admin-shell { display: none; min-height: 100vh; }
+  .admin-header {
+    background: var(--ink); padding: 1rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .admin-header-logo { font-family: var(--serif); color: #fff; font-size: 1.1rem; }
+  .admin-header-logo span { color: var(--terra-light); }
+  .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); padding: 0.4rem 1rem; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: all 0.2s; }
+  .btn-logout:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+
+  .admin-body { display: grid; grid-template-columns: 1fr 380px; gap: 0; min-height: calc(100vh - 57px); }
+
+  /* ── FORM PANEL ── */
+  .form-panel { padding: 2.5rem; border-right: 1px solid var(--rule); }
+  .panel-title { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 0.25rem; }
+  .panel-sub { font-size: 0.78rem; color: var(--muted); margin-bottom: 2rem; }
+
+  .field { margin-bottom: 1.5rem; }
+  .field label { display: block; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; font-weight: 500; }
+  .field input, .field select, .field textarea {
+    width: 100%; border: 1px solid var(--rule); background: #fff;
+    padding: 0.75rem 1rem; font-family: var(--sans); font-size: 0.88rem;
+    color: var(--ink); border-radius: 2px; outline: none; transition: border-color 0.2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--terra); }
+  .field textarea { min-height: 220px; resize: vertical; font-family: var(--sans); line-height: 1.7; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .field-hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.35rem; }
+
+  .toolbar { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  .toolbar button {
+    background: var(--cream); border: 1px solid var(--rule); padding: 0.3rem 0.7rem;
+    font-size: 0.75rem; cursor: pointer; border-radius: 2px; font-family: var(--sans);
+    transition: background 0.15s;
+  }
+  .toolbar button:hover { background: var(--rule); }
+  .toolbar button b { font-weight: 700; }
+  .toolbar button i { font-style: italic; }
+
+  .form-actions { display: flex; gap: 1rem; align-items: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--rule); }
+  .btn-publish { background: var(--ink); color: #fff; border: none; padding: 0.85rem 2rem; font-family: var(--sans); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: background 0.2s; }
+  .btn-publish:hover { background: #2d2a25; }
+  .btn-publish:disabled { opacity: 0.5; cursor: not-allowed; }
+  .status-msg { font-size: 0.82rem; color: var(--muted); }
+  .status-msg.success { color: #5a9e6f; }
+  .status-msg.error { color: #c05050; }
+
+  /* ── POSTS PANEL ── */
+  .posts-panel { padding: 2.5rem; background: var(--cream); }
+  .posts-panel-title { font-family: var(--serif); font-size: 1.2rem; font-weight: 400; margin-bottom: 1.5rem; }
+  .post-item {
+    background: #fff; border: 1px solid var(--rule); padding: 1rem 1.25rem;
+    border-radius: 2px; margin-bottom: 0.75rem; cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .post-item:hover { border-color: var(--terra); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .post-item-title { font-family: var(--serif); font-size: 1rem; font-weight: 500; color: var(--ink); margin-bottom: 0.25rem; line-height: 1.3; }
+  .post-item-meta { font-size: 0.7rem; color: var(--muted); display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .post-item-area { color: var(--terra); }
+  .post-item-featured { color: #5a9e6f; }
+  .posts-empty { font-size: 0.85rem; color: var(--muted); text-align: center; padding: 3rem 0; }
+  .posts-loading-msg { font-size: 0.85rem; color: var(--muted); }
+
+  @media (max-width: 900px) {
+    .admin-body { grid-template-columns: 1fr; }
+    .posts-panel { border-top: 1px solid var(--rule); }
+    .field-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Pehlivan Hukuk</div>
+    <div class="login-sub">İçerik Yönetimi</div>
+    <input type="password" id="pwd-input" placeholder="Yönetici şifresi" autocomplete="current-password">
+    <button class="btn-primary" id="login-btn">Giriş Yap</button>
+    <div class="login-error" id="login-error">Hatalı şifre.</div>
+  </div>
+</div>
+
+<!-- ADMIN SHELL -->
+<div id="admin-shell">
+  <header class="admin-header">
+    <div class="admin-header-logo">Pehlivan Hukuk <span>/ Admin</span></div>
+    <button class="btn-logout" id="logout-btn">Çıkış</button>
+  </header>
+  <div class="admin-body">
+
+    <!-- FORM -->
+    <div class="form-panel">
+      <div class="panel-title">Makale Ekle / Düzenle</div>
+      <div class="panel-sub">Yayımla'ya basınca site otomatik güncellenir (~30 sn).</div>
+
+      <div class="field">
+        <label>Başlık</label>
+        <input type="text" id="f-title" placeholder="Makale başlığı">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Hizmet Alanı</label>
+          <select id="f-area">
+            <option value="aile-hukuku">Aile Hukuku</option>
+            <option value="miras-hukuku">Miras Hukuku</option>
+            <option value="tuketici-hukuku">Tüketici Hukuku</option>
+            <option value="ceza-hukuku">Ceza Hukuku</option>
+            <option value="ticaret-hukuku">Ticaret Hukuku</option>
+            <option value="is-hukuku">İş Hukuku</option>
+            <option value="sozlesmeler-hukuku">Sözleşmeler Hukuku</option>
+            <option value="gayrimenkul-hukuku">Gayrimenkul Hukuku</option>
+            <option value="icra-iflas-hukuku">İcra ve İflas Hukuku</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Etiket</label>
+          <input type="text" id="f-tag" placeholder="Rehber, Karar, Uygulama…">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Tarih</label>
+          <input type="date" id="f-date">
+        </div>
+        <div class="field">
+          <label>Öne Çıkar?</label>
+          <select id="f-featured">
+            <option value="false">Hayır</option>
+            <option value="true">Evet — En üstte göster</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Özet (liste görünümünde)</label>
+        <textarea id="f-excerpt" style="min-height:80px" placeholder="Makale listesinde görünecek kısa özet…"></textarea>
+      </div>
+
+      <div class="field">
+        <label>İçerik</label>
+        <div class="toolbar">
+          <button onclick="wrap('<p>','</p>')">¶ Paragraf</button>
+          <button onclick="wrap('<h3>','</h3>')"><b>Başlık</b></button>
+          <button onclick="wrap('<strong>','</strong>')"><b>Kalın</b></button>
+          <button onclick="wrap('<em>','</em>')"><i>İtalik</i></button>
+          <button onclick="wrap('<blockquote>','</blockquote>')">❝ Alıntı</button>
+          <button onclick="wrapList()">• Liste</button>
+        </div>
+        <textarea id="f-content" placeholder="<p>İçerik buraya HTML olarak girilir.</p>&#10;<h3>Alt Başlık</h3>&#10;<p>Devam…</p>"></textarea>
+        <div class="field-hint">HTML kullanın: &lt;p&gt;, &lt;h3&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;&lt;li&gt;, &lt;blockquote&gt;</div>
+      </div>
+
+      <div class="field">
+        <label>Slug (URL)</label>
+        <input type="text" id="f-slug" placeholder="otomatik-olusturulur">
+        <div class="field-hint">Boş bırakırsanız başlıktan otomatik oluşturulur. Değiştirmeyin, URL bozulur.</div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-publish" id="publish-btn">Yayımla</button>
+        <button class="btn-logout" id="clear-btn" style="border-color:var(--rule);color:var(--muted)">Temizle</button>
+        <span class="status-msg" id="status-msg"></span>
+      </div>
+    </div>
+
+    <!-- POSTS LIST -->
+    <div class="posts-panel">
+      <div class="posts-panel-title">Mevcut Makaleler</div>
+      <div id="posts-list"><div class="posts-loading-msg">Yükleniyor…</div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var SESSION_KEY = 'ph_admin_pwd';
+  var pwd = '';
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  function slugify(str) {
+    return str.toLowerCase()
+      .replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ü/g,'u')
+      .replace(/ö/g,'o').replace(/ı/g,'i').replace(/ç/g,'c')
+      .replace(/[^a-z0-9\s-]/g,'').trim()
+      .replace(/\s+/g,'-').replace(/-+/g,'-');
+  }
+
+  function formatDate(d) {
+    var months = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+    var parts = d.split('-');
+    return parseInt(parts[2]) + ' ' + months[parseInt(parts[1])-1] + ' ' + parts[0];
+  }
+
+  window.wrap = function(open, close) {
+    var ta = document.getElementById('f-content');
+    var s = ta.selectionStart, e = ta.selectionEnd;
+    var sel = ta.value.substring(s, e) || 'metin';
+    ta.value = ta.value.substring(0,s) + open + sel + close + ta.value.substring(e);
+    ta.focus(); ta.setSelectionRange(s + open.length, s + open.length + sel.length);
+  };
+
+  window.wrapList = function() {
+    var ta = document.getElementById('f-content');
+    var ins = '<ul>\n  <li>madde 1</li>\n  <li>madde 2</li>\n</ul>';
+    var s = ta.selectionStart;
+    ta.value = ta.value.substring(0,s) + ins + ta.value.substring(s);
+    ta.focus();
+  };
+
+  // ── Login ─────────────────────────────────────────────────────────────────
+  var stored = sessionStorage.getItem(SESSION_KEY);
+  if (stored) { pwd = stored; showAdmin(); }
+
+  document.getElementById('pwd-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('login-btn').click();
+  });
+
+  document.getElementById('login-btn').addEventListener('click', function() {
+    var input = document.getElementById('pwd-input').value.trim();
+    if (!input) return;
+    // Verify against API
+    fetch('/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: input, _check: true })
+    }).then(function(r) {
+      if (r.status === 401) {
+        document.getElementById('login-error').style.display = 'block';
+      } else {
+        pwd = input;
+        sessionStorage.setItem(SESSION_KEY, pwd);
+        document.getElementById('login-error').style.display = 'none';
+        showAdmin();
+      }
+    }).catch(function() {
+      // Local dev: no API — accept any non-empty password
+      pwd = input;
+      sessionStorage.setItem(SESSION_KEY, pwd);
+      showAdmin();
+    });
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', function() {
+    sessionStorage.removeItem(SESSION_KEY);
+    location.reload();
+  });
+
+  // ── Auto-slug ─────────────────────────────────────────────────────────────
+  document.getElementById('f-title').addEventListener('input', function() {
+    var slugEl = document.getElementById('f-slug');
+    if (!slugEl.dataset.manual) slugEl.value = slugify(this.value);
+  });
+  document.getElementById('f-slug').addEventListener('input', function() {
+    this.dataset.manual = '1';
+  });
+
+  // ── Today date default ────────────────────────────────────────────────────
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+
+  // ── Load posts list ───────────────────────────────────────────────────────
+  function loadPosts() {
+    fetch('/posts.json?' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(renderPostsList)
+      .catch(function() {
+        document.getElementById('posts-list').innerHTML = '<div class="posts-empty">Makaleler yüklenemedi.</div>';
+      });
+  }
+
+  function renderPostsList(posts) {
+    var el = document.getElementById('posts-list');
+    if (!posts.length) { el.innerHTML = '<div class="posts-empty">Henüz makale yok.</div>'; return; }
+    var AREAS = {'aile-hukuku':'Aile Hukuku','miras-hukuku':'Miras Hukuku','tuketici-hukuku':'Tüketici Hukuku','ceza-hukuku':'Ceza Hukuku','ticaret-hukuku':'Ticaret Hukuku','is-hukuku':'İş Hukuku','sozlesmeler-hukuku':'Sözleşmeler Hukuku','gayrimenkul-hukuku':'Gayrimenkul Hukuku','icra-iflas-hukuku':'İcra ve İflas Hukuku'};
+    el.innerHTML = posts.map(function(p) {
+      return '<div class="post-item" data-slug="' + p.slug + '">' +
+        '<div class="post-item-title">' + p.title + '</div>' +
+        '<div class="post-item-meta">' +
+          '<span>' + (p.date || '') + '</span>' +
+          '<span class="post-item-area">' + (AREAS[p.practiceArea] || p.practiceArea) + '</span>' +
+          (p.featured ? '<span class="post-item-featured">★ Öne çıkan</span>' : '') +
+        '</div></div>';
+    }).join('');
+    // Click to load into form
+    el.querySelectorAll('.post-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        var s = this.dataset.slug;
+        var post = posts.find(function(p) { return p.slug === s; });
+        if (!post) return;
+        document.getElementById('f-title').value = post.title || '';
+        document.getElementById('f-area').value = post.practiceArea || 'aile-hukuku';
+        document.getElementById('f-tag').value = post.tag || '';
+        document.getElementById('f-excerpt').value = post.excerpt || '';
+        document.getElementById('f-content').value = post.content || '';
+        document.getElementById('f-featured').value = post.featured ? 'true' : 'false';
+        var slugEl = document.getElementById('f-slug');
+        slugEl.value = post.slug;
+        slugEl.dataset.manual = '1';
+        if (post.date) {
+          // Convert "12 Haziran 2025" → "2025-06-12" for the date input
+          var months = {'Ocak':1,'Şubat':2,'Mart':3,'Nisan':4,'Mayıs':5,'Haziran':6,'Temmuz':7,'Ağustos':8,'Eylül':9,'Ekim':10,'Kasım':11,'Aralık':12};
+          var parts = post.date.split(' ');
+          if (parts.length === 3) {
+            document.getElementById('f-date').value = parts[2] + '-' + String(months[parts[1]] || 1).padStart(2,'0') + '-' + String(parts[0]).padStart(2,'0');
+          }
+        }
+        setStatus('');
+        window.scrollTo(0,0);
+      });
+    });
+  }
+
+  // ── Publish ───────────────────────────────────────────────────────────────
+  document.getElementById('publish-btn').addEventListener('click', function() {
+    var title = document.getElementById('f-title').value.trim();
+    var area  = document.getElementById('f-area').value;
+    var tag   = document.getElementById('f-tag').value.trim();
+    var date  = document.getElementById('f-date').value;
+    var exc   = document.getElementById('f-excerpt').value.trim();
+    var cont  = document.getElementById('f-content').value.trim();
+    var feat  = document.getElementById('f-featured').value === 'true';
+    var slug  = document.getElementById('f-slug').value.trim() || slugify(title);
+
+    if (!title || !area || !date || !cont) {
+      setStatus('Lütfen zorunlu alanları doldurun (başlık, alan, tarih, içerik).', 'error');
+      return;
+    }
+
+    var post = { slug: slug, title: title, excerpt: exc, content: cont,
+                 date: formatDate(date), tag: tag, practiceArea: area, featured: feat };
+
+    var btn = document.getElementById('publish-btn');
+    btn.disabled = true;
+    setStatus('Yayımlanıyor…');
+
+    fetch('/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pwd, post: post })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      btn.disabled = false;
+      if (data.ok) {
+        setStatus('Yayımlandı! Site yaklaşık 30 saniye içinde güncellenir.', 'success');
+        loadPosts();
+      } else {
+        setStatus('Hata: ' + (data.error || 'Bilinmeyen hata'), 'error');
+      }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      setStatus('Sunucuya bağlanılamadı. Yerel geliştirme ortamında API çalışmaz.', 'error');
+    });
+  });
+
+  // ── Clear form ────────────────────────────────────────────────────────────
+  document.getElementById('clear-btn').addEventListener('click', function() {
+    ['f-title','f-tag','f-excerpt','f-content'].forEach(function(id) { document.getElementById(id).value = ''; });
+    document.getElementById('f-area').value = 'aile-hukuku';
+    document.getElementById('f-featured').value = 'false';
+    document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+    var slugEl = document.getElementById('f-slug');
+    slugEl.value = ''; delete slugEl.dataset.manual;
+    setStatus('');
+  });
+
+  function setStatus(msg, type) {
+    var el = document.getElementById('status-msg');
+    el.textContent = msg;
+    el.className = 'status-msg' + (type ? ' ' + type : '');
+  }
+
+  function showAdmin() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-shell').style.display = 'block';
+    loadPosts();
+  }
+})();
+</script>
+</body>
+</html>
