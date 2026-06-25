@@ -405,7 +405,7 @@ footer {
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   body { cursor: auto; }
   .cursor-dot, .cursor-ring { display: none; }
   nav { padding: 1.25rem 2rem; }
