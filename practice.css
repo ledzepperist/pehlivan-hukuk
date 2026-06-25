@@ -224,7 +224,7 @@ nav {
 }
 
 /* BLOG SECTION */
-#practice-posts { padding: 4rem 0 7rem; }
+#practice-posts { padding-top: 4rem; padding-bottom: 7rem; }
 .blog-section { width: 100%; }
 .blog-header {
   display: flex; align-items: baseline; justify-content: space-between;
