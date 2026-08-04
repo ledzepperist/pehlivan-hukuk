@@ -3,6 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1814">
+<meta name="description" content="">
+<link rel="canonical" href="">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pehlivan Hukuk ve Arabuluculuk Bürosu">
+<meta property="og:title" content="">
+<meta property="og:description" content="">
+<meta property="og:url" content="">
+<meta property="og:image" content="https://www.hukukpehlivan.com/og-image.jpg">
+<meta property="og:locale" content="tr_TR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="">
 <title>Makale — Pehlivan Hukuk</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -134,7 +147,9 @@
     'is-hukuku': 'İş Hukuku',
     'sozlesmeler-hukuku': 'Sözleşmeler Hukuku',
     'gayrimenkul-hukuku': 'Gayrimenkul Hukuku',
-    'icra-iflas-hukuku': 'İcra ve İflas Hukuku'
+    'icra-iflas-hukuku': 'İcra ve İflas Hukuku',
+    'gayrimenkul-yonetimi': 'Gayrimenkul Yönetimi',
+    'tuketici-hukuku': 'Tüketici Hukuku'
   };
 
   var slug = new URLSearchParams(window.location.search).get('slug');
@@ -155,6 +170,41 @@
       }
 
       document.title = post.title + ' — Pehlivan Hukuk';
+
+      // Dynamic SEO meta injection
+      var pageUrl = 'https://www.hukukpehlivan.com/article/?slug=' + post.slug;
+      var desc = post.excerpt || post.title;
+      function setMeta(sel, attr, val) {
+        var el = document.querySelector(sel); if (el) el.setAttribute(attr, val);
+      }
+      setMeta('meta[name="description"]', 'content', desc);
+      setMeta('link[rel="canonical"]', 'href', pageUrl);
+      setMeta('meta[property="og:title"]', 'content', post.title + ' — Pehlivan Hukuk');
+      setMeta('meta[property="og:description"]', 'content', desc);
+      setMeta('meta[property="og:url"]', 'content', pageUrl);
+      setMeta('meta[name="twitter:title"]', 'content', post.title + ' — Pehlivan Hukuk');
+      setMeta('meta[name="twitter:description"]', 'content', desc);
+
+      // Article JSON-LD
+      var ld = document.createElement('script');
+      ld.type = 'application/ld+json';
+      ld.text = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": post.title,
+        "description": desc,
+        "datePublished": post.date,
+        "url": pageUrl,
+        "author": {"@type": "Organization", "name": "Pehlivan Hukuk ve Arabuluculuk B\u00fcrosu"},
+        "publisher": {
+          "@type": "Organization",
+          "name": "Pehlivan Hukuk ve Arabuluculuk B\u00fcrosu",
+          "url": "https://www.hukukpehlivan.com",
+          "logo": {"@type": "ImageObject", "url": "https://www.hukukpehlivan.com/pehlivan-hukuk-logo.webp"}
+        },
+        "mainEntityOfPage": pageUrl
+      });
+      document.head.appendChild(ld);
       var areaName = AREA_NAMES[post.practiceArea] || post.practiceArea;
 
       root.innerHTML =
