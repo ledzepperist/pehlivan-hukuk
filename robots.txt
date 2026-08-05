@@ -1,32 +1,57 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /article/
+Disallow: /article/index.html
+Disallow: /article/$
 
 # AI crawlers — explicitly welcome
 User-agent: GPTBot
 Allow: /
+Disallow: /admin/
+Disallow: /article/index.html
+Disallow: /article/$
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /admin/
+Disallow: /article/index.html
+Disallow: /article/$
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /admin/
+Disallow: /article/index.html
+Disallow: /article/$
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /admin/
+Disallow: /article/index.html
+Disallow: /article/$
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /admin/
+Disallow: /article/index.html
+Disallow: /article/$
 
 User-agent: Amazonbot
 Allow: /
+Disallow: /admin/
+Disallow: /article/index.html
+Disallow: /article/$
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /admin/
+Disallow: /article/index.html
+Disallow: /article/$
 
 User-agent: cohere-ai
 Allow: /
+Disallow: /admin/
+Disallow: /article/index.html
+Disallow: /article/$
 
 Sitemap: https://www.hukukpehlivan.com/sitemap.xml
 LLMs: https://www.hukukpehlivan.com/llms.txt

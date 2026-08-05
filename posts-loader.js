@@ -34,7 +34,7 @@
 
       posts.forEach(function (p, i) {
         html +=
-          '<a href="../article/?slug=' + p.slug + '" class="blog-card reveal stagger-' + Math.min(i + 1, 6) + '">' +
+          '<a href="../article/' + p.slug + '/" class="blog-card reveal stagger-' + Math.min(i + 1, 6) + '">' +
             '<div class="blog-card-top">' +
               '<span class="blog-card-date">' + (p.date || '') + '</span>' +
               (p.featured ? '<span class="blog-card-featured">Öne Çıkan</span>' : '') +

@@ -1,12 +1,11 @@
 (function () {
-  // Detect depth: practice pages are one level deep (e.g. /aile-hukuku/)
+  // Detect depth: practice pages are one level deep (e.g. /aile-hukuku/),
+  // article pages are two levels deep (e.g. /article/{slug}/)
   var path = window.location.pathname;
-  var isRoot = path === '/' || path.endsWith('/index.html') && path.split('/').filter(Boolean).length <= 1 || path === '/index.html';
-  // More reliable: count non-empty segments
   var segments = path.replace(/\/index\.html$/, '').split('/').filter(Boolean);
-  var atRoot = segments.length === 0;
-  var root = atRoot ? './' : '../';
-  var home = atRoot ? '' : '../';
+  var depth = segments.length;
+  var root = depth === 0 ? './' : '../'.repeat(depth);
+  var home = depth === 0 ? '' : '../'.repeat(depth);
 
   function inject(url, placeholderId, tokens, cb) {
     var el = document.getElementById(placeholderId);
