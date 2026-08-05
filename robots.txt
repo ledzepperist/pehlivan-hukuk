@@ -54,4 +54,3 @@ Disallow: /article/index.html
 Disallow: /article/$
 
 Sitemap: https://www.hukukpehlivan.com/sitemap.xml
-LLMs: https://www.hukukpehlivan.com/llms.txt
