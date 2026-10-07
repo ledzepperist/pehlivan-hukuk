@@ -903,6 +903,104 @@
   }
   .c-value a:hover { color: var(--terra-light); border-color: var(--terra-light); }
 
+  .blog-section { width: 100%; }
+  .blog-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 3rem; padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .blog-label {
+    font-family: var(--serif); font-size: 1.6rem; font-weight: 300;
+    letter-spacing: 0.01em; color: var(--ink); display: block;
+  }
+  .blog-count {
+    font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); display: block;
+  }
+  .blog-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  }
+  .blog-card {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--warm-white); padding: 2.5rem 2rem 2rem;
+    position: relative; overflow: hidden;
+    transition: background 0.3s ease;
+    cursor: none;
+  }
+  .blog-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: var(--terra);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+  .blog-card:hover { background: #fff; }
+  .blog-card:hover::before { transform: scaleX(1); }
+  .blog-card:hover .blog-card-arrow { opacity: 1; transform: translateX(0); }
+  .blog-card-top {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1.25rem; flex-wrap: wrap;
+  }
+  .blog-card-date {
+    font-size: 0.68rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .blog-card-tag {
+    font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--terra); border: 1px solid rgba(168,95,56,0.35);
+    padding: 0.15rem 0.6rem; border-radius: 1px;
+  }
+  .blog-card-featured {
+    font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #fff; background: var(--terra);
+    padding: 0.15rem 0.6rem; border-radius: 1px;
+  }
+  .blog-card-title {
+    font-family: var(--serif); font-size: 1.3rem; font-weight: 400;
+    line-height: 1.3; letter-spacing: 0.01em;
+    color: var(--ink); margin-bottom: 1rem;
+  }
+  .blog-card-excerpt {
+    font-size: 0.82rem; color: var(--muted);
+    line-height: 1.75; margin-bottom: 2rem;
+  }
+  .blog-card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: auto;
+  }
+  .blog-card-read {
+    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--terra); border-bottom: 1px solid rgba(168,95,56,0.3);
+    padding-bottom: 1px;
+  }
+  .blog-card-arrow {
+    color: var(--terra); font-size: 1rem;
+    opacity: 0; transform: translateX(-6px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .blog-empty {
+    padding: 5rem 0; text-align: center;
+    font-family: var(--serif); font-size: 1.2rem; color: var(--muted);
+  }
+  /* ARTICLES (homepage) */
+  .articles { background: var(--cream); padding: 9rem 0; }
+  .articles-header { margin-bottom: 4rem; }
+  .articles-title {
+    font-family: var(--serif); font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 300; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.01em;
+  }
+  .articles-subtitle { color: var(--muted); font-size: 0.85rem; max-width: 52ch; line-height: 1.75; }
+  .articles .blog-grid { grid-template-columns: repeat(3, 1fr); }
+  .articles .blog-card { display: flex; flex-direction: column; }
+  .articles .blog-card-footer { margin-top: auto; }
+  @media (max-width: 1023px) { .articles .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 767px) {
+    .articles { padding: 5rem 0; }
+    .articles .blog-grid { grid-template-columns: 1fr; }
+    .blog-card-arrow { opacity: 1; transform: none; }
+  }
+  
+
   /* FOOTER */
   footer {
     background: #0c0b09;
@@ -1414,6 +1512,91 @@
           <p class="pillar-text">Mahkemede, müzakere masasında ya da arabuluculukta — müvekkilimizin çıkarlarını en güçlü biçimde temsil ederiz.</p>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAKALELER -->
+<section class="articles" id="makaleler">
+  <div class="container">
+    <div class="articles-header">
+      <p class="section-label reveal">Makaleler</p>
+      <h2 class="articles-title reveal stagger-1">Hukuki rehber yazılarımız.</h2>
+      <p class="articles-subtitle reveal stagger-2">Boşanma, miras, iş, icra ve gayrimenkul hukuku üzerine Pendik'ten pratik bilgiler ve süreç rehberleri.</p>
+    </div>
+    <div class="blog-grid">
+<!-- MAKALELER:START -->
+      <a href="article/mirascilik-belgesi-veraset-ilami/" class="blog-card reveal stagger-1">
+        <div class="blog-card-top">
+          <span class="blog-card-date">7 Ekim 2026</span>
+          <span class="blog-card-featured">Öne Çıkan</span>
+          <span class="blog-card-tag">Rehber</span>
+        </div>
+        <h3 class="blog-card-title">Mirasçılık Belgesi (Veraset İlamı) Nasıl Alınır? (2026)</h3>
+        <p class="blog-card-excerpt">Veraset ilamı noterden mi mahkemeden mi alınır? Noterin belge veremediği hâller, vasiyetname varsa ne olur, belgenin iptali ve sonrasında yapılacak tapu, banka ve vergi işlemleri.</p>
+        <div class="blog-card-footer"><span class="blog-card-read">Devamını Oku</span><span class="blog-card-arrow">→</span></div>
+      </a>
+      <a href="article/miras-taksimi/" class="blog-card reveal stagger-2">
+        <div class="blog-card-top">
+          <span class="blog-card-date">6 Ekim 2026</span>
+          <span class="blog-card-featured">Öne Çıkan</span>
+          <span class="blog-card-tag">Rehber</span>
+        </div>
+        <h3 class="blog-card-title">Miras Kalan Mallar Nasıl Paylaşılır? Miras Taksimi Rehberi (2026)</h3>
+        <p class="blog-card-excerpt">Miras kalan ev, arsa ve paralar nasıl paylaşılır? Elbirliği mülkiyeti, paylaşma sözleşmesi, paylaşma davası, eşin aile konutu hakkı, denkleştirme ve Yargıtay kararları.</p>
+        <div class="blog-card-footer"><span class="blog-card-read">Devamını Oku</span><span class="blog-card-arrow">→</span></div>
+      </a>
+      <a href="article/isci-haklari/" class="blog-card reveal stagger-3">
+        <div class="blog-card-top">
+          <span class="blog-card-date">6 Ekim 2026</span>
+          <span class="blog-card-featured">Öne Çıkan</span>
+          <span class="blog-card-tag">Rehber</span>
+        </div>
+        <h3 class="blog-card-title">İşçinin Kıdem ve İhbar Tazminatı Hakları (2026)</h3>
+        <p class="blog-card-excerpt">Kıdem ve ihbar tazminatına kimler hak kazanır, nasıl hesaplanır, 2026 tavanı ne kadar? İstifa, emeklilik, askerlik ve evlilik hâlleri, arabuluculuk ve zamanaşımı.</p>
+        <div class="blog-card-footer"><span class="blog-card-read">Devamını Oku</span><span class="blog-card-arrow">→</span></div>
+      </a>
+      <a href="article/ortakligin-giderilmesi-davasi/" class="blog-card reveal stagger-4">
+        <div class="blog-card-top">
+          <span class="blog-card-date">5 Ekim 2026</span>
+          <span class="blog-card-featured">Öne Çıkan</span>
+          <span class="blog-card-tag">Rehber</span>
+        </div>
+        <h3 class="blog-card-title">Ortaklığın Giderilmesi Davası: Şartları, Süreci ve Arabuluculuk (2026)</h3>
+        <p class="blog-card-excerpt">Hisseli tapu ve miras kalan taşınmazlarda ortaklığın giderilmesi: zorunlu arabuluculuk, görevli mahkeme, aynen taksim ve satış süreci ile 12. Yargı Paketi'yle gelen yeni ihale kuralları.</p>
+        <div class="blog-card-footer"><span class="blog-card-read">Devamını Oku</span><span class="blog-card-arrow">→</span></div>
+      </a>
+      <a href="article/icra-takibi-nasil-baslatilir/" class="blog-card reveal stagger-5">
+        <div class="blog-card-top">
+          <span class="blog-card-date">20 Haziran 2025</span>
+          <span class="blog-card-featured">Öne Çıkan</span>
+          <span class="blog-card-tag">Rehber</span>
+        </div>
+        <h3 class="blog-card-title">İcra Takibi Nasıl Başlatılır? Adım Adım Süreç</h3>
+        <p class="blog-card-excerpt">Alacağınızı mahkeme yoluna gitmeden tahsil edebilirsiniz. İcra hukuku, alacaklılara güçlü ve hızlı bir tahsil mekanizması sunmaktadır.</p>
+        <div class="blog-card-footer"><span class="blog-card-read">Devamını Oku</span><span class="blog-card-arrow">→</span></div>
+      </a>
+      <a href="article/bosanma-sureci/" class="blog-card reveal stagger-6">
+        <div class="blog-card-top">
+          <span class="blog-card-date">12 Haziran 2025</span>
+          <span class="blog-card-featured">Öne Çıkan</span>
+          <span class="blog-card-tag">Rehber</span>
+        </div>
+        <h3 class="blog-card-title">Boşanma Sürecinde Bilinmesi Gereken Her Şey</h3>
+        <p class="blog-card-excerpt">Boşanma, yalnızca hukuki değil duygusal açıdan da ağır bir süreçtir. Haklarınızı bilerek bu sürece hazırlıklı girmek, hem sizi hem de çocuklarınızı korur.</p>
+        <div class="blog-card-footer"><span class="blog-card-read">Devamını Oku</span><span class="blog-card-arrow">→</span></div>
+      </a>
+      <a href="article/velayet-davasi-sureci/" class="blog-card reveal stagger-6">
+        <div class="blog-card-top">
+          <span class="blog-card-date">28 Nisan 2025</span>
+          <span class="blog-card-featured">Öne Çıkan</span>
+          <span class="blog-card-tag">Uygulama</span>
+        </div>
+        <h3 class="blog-card-title">Velayet Davası: Çocuğun Üstün Yararı İlkesi</h3>
+        <p class="blog-card-excerpt">Velayet kararlarında hâkim, her zaman çocuğun üstün yararını esas alır. Ebeveynlerin hukuki ve psikolojik hazırlığı, sürecin seyrini doğrudan etkiler.</p>
+        <div class="blog-card-footer"><span class="blog-card-read">Devamını Oku</span><span class="blog-card-arrow">→</span></div>
+      </a>
+<!-- MAKALELER:END -->
     </div>
   </div>
 </section>

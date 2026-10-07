@@ -88,6 +88,31 @@ function updateSitemap(posts) {
   fs.writeFileSync(file, xml);
 }
 
+// Static, crawlable list of every post on the homepage (#makaleler section).
+function renderHomeArticles(posts) {
+  const file = path.join(ROOT, 'index.html');
+  let html = fs.readFileSync(file, 'utf8');
+  const start = '<!-- MAKALELER:START -->';
+  const end = '<!-- MAKALELER:END -->';
+  const a = html.indexOf(start), b = html.indexOf(end);
+  if (a < 0 || b < a) return;
+  const byDate = posts.slice().sort((x, y) => (isoDate(y.date) || '').localeCompare(isoDate(x.date) || ''));
+  const cards = byDate.map((p, i) => [
+    `      <a href="article/${p.slug}/" class="blog-card reveal stagger-${Math.min(i + 1, 6)}">`,
+    '        <div class="blog-card-top">',
+    `          <span class="blog-card-date">${escHtml(p.date || '')}</span>`,
+    p.featured ? '          <span class="blog-card-featured">Öne Çıkan</span>' : null,
+    p.tag ? `          <span class="blog-card-tag">${escHtml(p.tag)}</span>` : null,
+    '        </div>',
+    `        <h3 class="blog-card-title">${escHtml(p.title)}</h3>`,
+    `        <p class="blog-card-excerpt">${escHtml(p.excerpt || '')}</p>`,
+    '        <div class="blog-card-footer"><span class="blog-card-read">Devamını Oku</span><span class="blog-card-arrow">→</span></div>',
+    '      </a>',
+  ].filter(Boolean).join('\n')).join('\n');
+  html = html.slice(0, a + start.length) + '\n' + cards + '\n' + html.slice(b);
+  fs.writeFileSync(file, html);
+}
+
 function main() {
   const template = fs.readFileSync(path.join(__dirname, 'article-template.html'), 'utf8');
   const posts = JSON.parse(fs.readFileSync(path.join(ROOT, 'posts.json'), 'utf8'))
@@ -102,7 +127,8 @@ function main() {
     fs.writeFileSync(path.join(dir, 'index.html'), render(template, post));
   }
   updateSitemap(sorted);
-  console.log(`build-articles: wrote ${posts.length} article page(s) + sitemap entries`);
+  renderHomeArticles(posts);
+  console.log(`build-articles: wrote ${posts.length} article page(s), sitemap entries and homepage list`);
 }
 
 try {
