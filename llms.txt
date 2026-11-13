@@ -27,6 +27,7 @@
 - [Gayrimenkul ve Kira Hukuku](https://www.hukukpehlivan.com/gayrimenkul-hukuku/): Tapu devri, ipotek, kira sözleşmesi, tahliye davası, kira artış uyuşmazlıkları, imar hukuku.
 - [İcra ve İflas Hukuku](https://www.hukukpehlivan.com/icra-iflas-hukuku/): İcra takibi başlatma, ödeme emrine itiraz, maaş haczi, iflas alacak bildirimi, sıra cetveli.
 - [Gayrimenkul Yönetimi](https://www.hukukpehlivan.com/gayrimenkul-yonetimi/): Kat mülkiyeti, site yönetimi, aidat icra takibi, yönetim planı değişikliği, kat malikleri kurulu.
+- [Yurt Dışında Yaşayan Taşınmaz Sahipleri](https://www.hukukpehlivan.com/yurt-disindan-tasinmaz-yonetimi/): Almanya, Hollanda ve Fransa gibi ülkelerde yaşayanlar için vekâletname, kiracı tahliyesi, kira artışı, kira geliri ve miras kalan taşınmaz.
 
 ## Arabuluculuk Hakkında Önemli Bilgiler
 
